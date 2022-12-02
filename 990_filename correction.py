@@ -17,8 +17,7 @@ for i in tqdm(files):
     begindate_chcek2 =root[0].find('./{http://www.irs.gov/efile}TaxPeriodBeginDt')
     begindate = begindate_check.text if ET.iselement(begindate_check)==True else begindate_chcek2.text if ET.iselement(begindate_chcek2)==True else ''
     year = begindate[0:4]
-    #print(os.path.join(target_location, begindate[0:4]))
-    #Creates folder based on begining year of tax return(begindate)
+
 
     if ET.iselement(GrantorEIN_check):
         folder = os.path.join(target_location, begindate[0:4])
@@ -30,8 +29,9 @@ for i in tqdm(files):
         os.rename(i, '/Volumes/Storage/TPC990/Errors/'+os.path.basename(i))
 
     GrantorEIN = GrantorEIN_check.text
+    #filenames
+    filecheck = target_location + '/' + year + '/grants_' + GrantorEIN + '.csv'
 
-    filecheck = target_location + '/' + year + '/' + GrantorEIN + '.csv'
     if os.path.isfile(filecheck):
         decoding = os.path.basename(i)[0:-11]
         Docnumber = decoding  # may be unnecessary
@@ -51,6 +51,8 @@ for i in tqdm(files):
         GrantOrContributionPdDurYrGrp_check = root[1].find(
             "./*/*/{http://www.irs.gov/efile}GrantOrContributionPdDurYrGrp")
 
+
+
         GrantOrContributionPdDurYrGrp = root[1].findall("./*/*/{http://www.irs.gov/efile}GrantOrContributionPdDurYrGrp")
         if ET.iselement(ScheduleI) == True and ET.iselement(ScheduleI.find('{http://www.irs.gov/efile}RecipientTable')):
             RecipientTable = ScheduleI.find('{http://www.irs.gov/efile}RecipientTable')
@@ -69,6 +71,13 @@ for i in tqdm(files):
                     business_name_check3) == True else business_name_check2.text if ET.iselement(
                     business_name_check2) == True else ''
 
+                business_name_check_ln2 = recipient.find('./*/{http://www.irs.gov/efile}BusinessNameLine2Txt')
+                business_name_check2_ln2 = recipient.find('./*/{http://www.irs.gov/efile}BusinessNameLine2')
+                business_name = business_name_check_ln2.text.upper() if ET.iselement(
+                    business_name_check2_ln2) else business_name_check2_ln2.text.upper() \
+                    if ET.iselement(business_name_check2_ln2) else ''
+
+                """
                 address_element_check = recipient.find('.*/{http://www.irs.gov/efile}AddressLine1Txt')
                 address_element_check2 = recipient.find('.*/{http://www.irs.gov/efile}AddressLine1')
                 address_element_line1 = address_element_check.text if ET.iselement(
@@ -93,7 +102,7 @@ for i in tqdm(files):
                 address_element_zip_check2 = recipient.find('.*/{http://www.irs.gov/efile}ZIPCode')
                 address_element_zip = address_element_zip_check.text if ET.iselement(
                     address_element_zip_check) == True else address_element_zip_check2.text if ET.iselement(address_element_zip_check2) == True else ''
-
+                """
                 amount_element_check = recipient.find('./{http://www.irs.gov/efile}CashGrantAmt')
                 amount_element_check2 = recipient.find('./{http://www.irs.gov/efile}AmountOfCashGrant')
                 amount_element = amount_element_check.text if ET.iselement(amount_element_check) == True else amount_element_check2.text if ET.iselement(amount_element_check2)==True else ''
@@ -106,13 +115,12 @@ for i in tqdm(files):
                 purpose_element_check2 = recipient.find('./{http://www.irs.gov/efile}PurposeOfGrant')
                 purpose_element = purpose_element_check.text if ET.iselement(purpose_element_check) == True else purpose_element_check2.text if ET.iselement(purpose_element_check2)==True else ''
 
-                address = address_element_line1 + ' ' + address_element_line2 + ' ' + address_element_city + ' ' + address_element_state + ' ' + address_element_zip
+                #address = address_element_line1 + ' ' + address_element_line2 + ' ' + address_element_city + ' ' + address_element_state + ' ' + address_element_zip
 
-                rows.append([GrantorEIN, None, recipient_EIN, business_name, address, amount_element,
-                             status_element, purpose_element,year])
+                rows.append([GrantorEIN, recipient_EIN, business_name, amount_element,
+                            purpose_element, year])
 
-            df = pd.DataFrame(rows, columns=["grantor_EIN", "grantor_name", "EIN", "organization", "address", "amount",
-                                             "status", "purpose","year"],dtype=object)  # creates df of orgs donations
+            df = pd.DataFrame(rows, columns=["grantor_ein", "grantee_ein", "organization", "amount", "purpose", "year"], dtype="object")  # creates df of orgs donations
             df.to_csv(filecheck)
         elif ET.iselement(GrantOrContributionPdDurYrGrp_check) == True:
             grants_list = root[1].findall("./*/*/{http://www.irs.gov/efile}GrantOrContributionPdDurYrGrp")
@@ -121,7 +129,7 @@ for i in tqdm(files):
                 # EINs
                 recipient_EIN_check = recipient.find('./{http://www.irs.gov/efile}RecipientEIN')
                 recipient_EIN = recipient_EIN_check.text if ET.iselement(recipient_EIN_check) == True else recipient.find('./{http://www.irs.gov/efile}EINOfRecipient')
-                # Org Names
+                # Org Names ln1
                 business_name_check = recipient.find('./*/{http://www.irs.gov/efile}BusinessNameLine1Txt')
                 business_name_check2 = recipient.find('./{http://www.irs.gov/efile}RecipientPersonNm')
                 business_name_check3 = recipient.find('./*/{http://www.irs.gov/efile}BusinessNameLine1')
@@ -129,6 +137,15 @@ for i in tqdm(files):
                     business_name_check) == True else business_name_check3.text if ET.iselement(
                     business_name_check3) == True else business_name_check2.text if ET.iselement(
                     business_name_check2) == True else ''
+                #Org name ln2
+                business_name_check_ln2 = recipient.find('./*/{http://www.irs.gov/efile}BusinessNameLine2Txt')
+                business_name_check2_ln2 = recipient.find('./*/{http://www.irs.gov/efile}BusinessNameLine2')
+                business_name = business_name_check_ln2.text.upper() if ET.iselement(
+                    business_name_check2_ln2)  else business_name_check2_ln2.text.upper()\
+                    if ET.iselement(business_name_check2_ln2) else ''
+
+
+                """"
                 # address line 1
                 address_element_check = recipient.find('.*/{http://www.irs.gov/efile}AddressLine1Txt')
                 address_element_line1 = address_element_check.text if ET.iselement(
@@ -149,6 +166,7 @@ for i in tqdm(files):
                 address_element_zip_check = recipient.find('.*/{http://www.irs.gov/efile}ZIPCd')
                 address_element_zip = address_element_zip_check.text if ET.iselement(
                     address_element_zip_check) == True else ''
+                """
 
                 # Amount
                 amount_element_check = recipient.find('./{http://www.irs.gov/efile}Amt')
@@ -160,19 +178,17 @@ for i in tqdm(files):
                 purpose_element_check = recipient.find('./{http://www.irs.gov/efile}GrantOrContributionPurposeTxt')
                 purpose_element = purpose_element_check.text if ET.iselement(purpose_element_check) == True else ''
                 # combines Element
-                address = address_element_line1 + ' ' + address_element_line2 + ' ' + address_element_city + ' ' + address_element_state + ' ' + address_element_zip
+                #address = address_element_line1 + ' ' + address_element_line2 + ' ' + address_element_city + ' ' + address_element_state + ' ' + address_element_zip
 
-                rows.append([GrantorEIN, None, recipient_EIN, business_name, address, amount_element,
-                             status_element, purpose_element,year])
+                rows.append([GrantorEIN, recipient_EIN, business_name, amount_element,
+                              purpose_element, year])
 
-            df = pd.DataFrame(rows, columns=["grantor_EIN", "grantor_name", "EIN", "organization", "address", "amount",
-                                             "status", "purpose","year"],dtype="object")
+            df = pd.DataFrame(rows, columns=["grantor_ein", "grantee_ein", "organization", "amount", "purpose", "year"],dtype="object")
             df.to_csv(filecheck)
         else:
             rows = []
-            df = pd.DataFrame(rows, columns=["grantor_EIN", "grantor_name", "EIN", "organization", "address", "amount",
-                                             "status", "purpose","year"],dtype="object")  # creates df of orgs donations
-            df.to_csv(target_location + '/'+ year+ '/' + GrantorEIN + '.csv')
+            df = pd.DataFrame(rows, columns=["grantor_ein", "grantee_ein", "organization", "amount", "purpose", "year"],dtype="object")  # creates df of orgs donations
+            df.to_csv(target_location + '/'+ year+ '/grants_' + GrantorEIN + '.csv')
         df2 = pd.DataFrame(rows2, columns=['EIN', 'Docnumber'])
 #df2.to_csv(target_location + '/' + year + '-' + 'EIN_DocnumberDictionary.csv')
 
