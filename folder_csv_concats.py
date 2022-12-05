@@ -3,14 +3,17 @@ import pandas as pd
 import os
 from tqdm import tqdm
 
-all_folders = glob.glob('//Volumes/Storage/TPC990/Amazon990_csv_boardmembers/*')
-dir_name = os.path.dirname((all_folders[1]))
+#def folderconcat (folder_location,keyword)
 
-folder_name=os.path.basename(dir_name)
+all_folders = glob.glob('/Volumes/SSD/production/*')
+keyword = 'profile'
+
+dir_name = os.path.dirname((all_folders[1]))
+folder_name = os.path.basename(dir_name)
 
 li = []
 for folders in tqdm(all_folders):
-    files = glob.glob(folders + '/*')
+    files = glob.glob(folders + '/' + keyword + '*.csv')
     # print(folders)
     file_suffix = os.path.basename(folders)
     df = pd.DataFrame()
@@ -24,6 +27,6 @@ for folders in tqdm(all_folders):
             li.append(df)
     if len(li) != 0:
         frame = pd.concat(li, axis=0, ignore_index=True)
-        frame.to_csv(dir_name + '/' + file_suffix[-4:] + '_990_'+folder_name+'_combined.csv', index=False)
+        frame.to_csv(dir_name + '/' + file_suffix[-4:] + keyword+'_combined.csv', index=False)
 
 print('all files concated')

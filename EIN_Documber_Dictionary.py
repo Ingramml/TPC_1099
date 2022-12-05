@@ -3,9 +3,9 @@ import os
 import glob
 import xml.etree.ElementTree as ET
 #TPC990 testing
-files = glob.glob('/Volumes/SSD/download990mxls/*.xml')
+files = glob.glob('')
 
-allxml = glob.glob('/Volumes/SSD/download990mxls/*.xml')
+allxml = glob.glob('')
 
 target_location = os.path.dirname(files[0])
 df2 = pd.DataFrame.empty
@@ -30,4 +30,4 @@ for i in allxml:
     rows2.append([GrantorEIN, filenumber,year])
 
     df2 = pd.DataFrame(rows2, columns=['EIN', 'Docnumber','year'])
-    df2.to_csv(target_location + '/' + 'EIN_DocnumberDictionary.csv')
+    df2.to_csv(target_location + '/' + 'EIN_Docnumber_Dictionary.csv')
