@@ -164,11 +164,11 @@ for i in tqdm(files):
             ET.iselement(status_check4) and status_check4.text == 'X' else ''
 
     #mission
-    mission_check1 = root[1]['ActivityOrMissionDesc']
-    mission_check2 = root[1]['PrimaryExemptPurposeTxt']
-    mission_check3 = root[1]['MissionDesc']
+    mission_check1 = root[1].find("./*{http://www.irs.gov/efile}ActivityOrMissionDesc")
+    mission_check2 = root[1].find('./*{http://www.irs.gov/efile}PrimaryExemptPurposeTxt')
+    mission_check3 = root[1].find('./*{http://www.irs.gov/efile}MissionDesc')
     mission_check4 = root[1].find('./*{http://www.irs.gov/efile}ActivityOrMissionDescription')
-    #missionCheck_2 = root[1].find('./*{http://www.irs.gov/efile}ActivityOrMissionDesc')
+
 
     mission = mission_check1.text if ET.iselement(mission_check1) else mission_check2.text if ET.iselement(mission_check2) \
         else mission_check3.text if ET.iselement(mission_check3) else mission_check4.text if ET.iselement(mission_check4) \

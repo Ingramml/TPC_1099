@@ -2,7 +2,7 @@ import glob
 import pandas as pd
 import os
 from tqdm import tqdm
-keyword = 'income_expenses'
+keyword = 'profile'
 files = glob.glob('/Volumes/SSD/production/*'+keyword+'*.csv')
 print(files)
 dir_name = os.path.dirname(files[1])
