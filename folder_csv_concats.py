@@ -6,7 +6,7 @@ from tqdm import tqdm
 #def folderconcat (folder_location,keyword)
 
 all_folders = glob.glob('/Volumes/SSD/production/*')
-keyword = 'profile'
+keyword = 'boardmember'
 
 dir_name = os.path.dirname((all_folders[1]))
 folder_name = os.path.basename(dir_name)
@@ -17,11 +17,11 @@ for folders in tqdm(all_folders):
     # print(folders)
     file_suffix = os.path.basename(folders)
     df = pd.DataFrame()
-    li=[]
+    li = []
     for file in files:
 
         df = pd.read_csv(file, index_col=None, header=0, low_memory=False, dtype="object")
-        if df.empty == True:
+        if df.empty:
             os.remove(file)
         else:
             li.append(df)

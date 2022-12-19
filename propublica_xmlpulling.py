@@ -15,7 +15,7 @@ driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 eins = ['ein']
 for ein in eins:
 """
-ein = '731239880'
+ein = '721068329'
 target_location='/Volumes/SSD/TPC990/TPC_xml'
 
 html_doc=driver.get("https://projects.propublica.org/nonprofits/organizations/"+ein)
@@ -30,7 +30,7 @@ for xml in xmls:
     #print(link)
     equallocator=link.find('=')
     filename=link[equallocator+1:] #pulls file number
-    WebDriverWait(driver, timeout=1000)
+    #  WebDriverWait(driver, timeout=10)
     if link.find('xml')!= -1:
         if os.path.exists(os.path.join(target_location,filename+'_public.xml')) == False:
             #print(os.path.join(target_location, filename + '.xml'))
