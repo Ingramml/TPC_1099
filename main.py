@@ -1,4 +1,3 @@
-import glob
+from irs_file_downloading import irsdownload
 
-all_folders = glob.glob('/Users/michaelingram/Documents/')
-print(all_folders)
+irsdownload('/Users/michaelingram/Downloads','/Volumes/SSD/TPC990/TPC_xml')

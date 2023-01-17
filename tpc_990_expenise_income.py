@@ -6,6 +6,7 @@ import os
 
 files = glob.glob('/Volumes/SSD/TPC990/TPC_xml/*.xml')  # Xml files
 target_location = '/Volumes/SSD/production'
+
 for i in tqdm(files):
     # print(i)
     rows_income_expense = []
