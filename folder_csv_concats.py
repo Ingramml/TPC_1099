@@ -19,7 +19,6 @@ def folder_csv_concat (folder_location,keyword):
         df = pd.DataFrame()
         li = []
         for file in files:
-
             df = pd.read_csv(file, index_col=None, header=0, low_memory=False, dtype="object")
             if df.empty:
                 os.remove(file)
@@ -29,9 +28,9 @@ def folder_csv_concat (folder_location,keyword):
             frame = pd.concat(li, axis=0, ignore_index=True)
             frame.to_csv(dir_name + '/' + file_suffix[-4:] + keyword+'_combined.csv', index=False)
 
-    print('all files concated')
+    print('all ' + keyword + 'files concatenated')
 
-folder_csv_concat('/Users/michaelingram/Downloads/Tpc','boardmember')
-folder_csv_concat('/Users/michaelingram/Downloads/Tpc','profile')
-folder_csv_concat('/Users/michaelingram/Downloads/Tpc','income')
-folder_csv_concat('/Users/michaelingram/Downloads/Tpc','grants')
+#folder_csv_concat('/Volumes/TPC','boardmember')
+folder_csv_concat('/Volumes/TPC','profile')
+#folder_csv_concat('/Volumes/TPC','income')
+folder_csv_concat('/Volumes/TPC','grants')

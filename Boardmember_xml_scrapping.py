@@ -93,5 +93,5 @@ def irs_boardmember(files,target_location):
 
             rows.append([EIN, Name, Title, Averagehoursworked, Individualtrusteeordirector, compensation_from_org,
                          compensation_from_related_org, other_compensation, year[0:4]])
-            df = pd.DataFrame(rows, columns=columns)
+            df = pd.DataFrame(rows, columns=columns,dtype=object)
             df.to_csv(filecheck)

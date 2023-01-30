@@ -12,6 +12,7 @@ response = requests.get('https://projects.propublica.org/nonprofits/api/v2/searc
 
 x=response.json()
 page_num=x["num_pages"]
+print(x)
 print(page_num)
 z=0
 li=[]
