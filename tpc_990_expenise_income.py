@@ -3,10 +3,13 @@ import xml.etree.ElementTree as ET
 import pandas as pd
 from tqdm import tqdm
 import os
+
+
 #df=pd.read_csv('/Users/michaelingram/Downloads/newfiles.csv',index_col=False)
 #files=df['filename'].tolist()
 #files = glob.glob('/Volumes/SSD/TPC990/TPC_xml/*.xml')  # Xml files
 #target_location = '/Users/michaelingram/Downloads/Tpc'
+
 
 def  irs_expense_income(files,target_location):
     for i in tqdm(files):

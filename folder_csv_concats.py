@@ -4,9 +4,10 @@ import os
 from tqdm import tqdm
 
 
+# all_folders = glob.glob('/Volumes/SSD/production/*')
+# keyword = 'boardmember'
 
-#all_folders = glob.glob('/Volumes/SSD/production/*')
-#keyword = 'boardmember'
+
 def folder_csv_concat (folder_location,keyword):
     all_folders = glob.glob(folder_location+'/*')
     dir_name = os.path.dirname((all_folders[1]))
@@ -19,6 +20,7 @@ def folder_csv_concat (folder_location,keyword):
         df = pd.DataFrame()
         li = []
         for file in files:
+
             df = pd.read_csv(file, index_col=None, header=0, low_memory=False, dtype="object")
             if df.empty:
                 os.remove(file)
@@ -28,9 +30,9 @@ def folder_csv_concat (folder_location,keyword):
             frame = pd.concat(li, axis=0, ignore_index=True)
             frame.to_csv(dir_name + '/' + file_suffix[-4:] + keyword+'_combined.csv', index=False)
 
-    print('all ' + keyword + 'files concatenated')
+    print('all ' + keyword + ' files concated')
 
-#folder_csv_concat('/Volumes/TPC','boardmember')
+folder_csv_concat('/Volumes/TPC','boardmember')
 folder_csv_concat('/Volumes/TPC','profile')
-#folder_csv_concat('/Volumes/TPC','income')
+folder_csv_concat('/Volumes/TPC','income')
 folder_csv_concat('/Volumes/TPC','grants')
