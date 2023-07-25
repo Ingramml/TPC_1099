@@ -33,7 +33,6 @@ for i in files:
     df2 = pd.DataFrame(rows2, columns=['EIN', 'Docnumber'])
 
 
-
     for x in tqdm(allxml):
 
         tree = ET.parse(x)
