@@ -11,7 +11,11 @@ import os
 #target_location = '/Users/michaelingram/Downloads/Tpc'
 
 
-def  irs_expense_income(files,target_location):
+def  irs_expense_income(file_location,target_location):
+
+    file_path = os.path.join(file_location, '/*.xml')
+    files = glob.glob(file_path)
+
     for i in tqdm(files):
         # print(i)
         rows_income_expense = []

@@ -1,41 +1,52 @@
 import glob
 import os
 import shutil
+from tqdm import tqdm
 
 #keyword =''
 #files = glob.glob("/Volumes/SSD/production/*/*.csv")
 def filetype_delete(file_location,filetype):
-    file_path=file_location+'/*'+filetype
-    files=glob.glob(file_path)
-    for x in files:
-        if os.path.exists(x):
-            os.remove(x)
-    print('all'+ filetype+ ' files from ' +file_location+ ' deleted.')
+    try:
+        file_path=file_location+'/*'+filetype
+        files=glob.glob(file_path)
+        for x in tqdm(files):
+            if os.path.exists(x):
+                os.remove(x)
+        print('all'+ filetype+ ' files from ' +file_location+ ' deleted.')
+    except FileNotFoundError:
+            print(file_location + 'not found')
 
 
 def folder_clean_up(file_location,exclude_folder_name):
-    folder_path=file_location+'/*'
-    folders = glob.glob(folder_path)
-    for folder in folders:
-        if exclude_folder_name not in os.path.basename(folder):
-           shutil.rmtree(folder)
-    print('All folders in ' + file_location + ' deleted')
+    try:
+        folder_path=file_location+'/*'
+        folders = glob.glob(folder_path)
+        for folder in tqdm(folders):
+            if exclude_folder_name not in os.path.basename(folder):
+               shutil.rmtree(folder)
+        print('All folders in ' + file_location + ' deleted')
+    except FileNotFoundError:
+        print(file_location + ' not found')
 
 
-def csv_folder_delete(file_location):
-    folder_path = glob.glob(file_location + '/*')
-    for folders in folder_path:
-        csv_file = folders + '/*.csv'
-        csv_files = glob.glob(csv_file)
-        print('Deleting files from ' + os.path.dirname(csv_files[0]))
-        for files in csv_files:
-            os.remove(files)
-        print('all files in ' + folders)
+def neste_file_folder_delete(file_location,file_type):
+    try:
+        folder_path = os.scandir(file_location)
+        for folders in tqdm(folder_path):
+            nested_file = str(folders) + '/*.'+ str(file_type)
+            nested_files = glob.glob(nested_file, recursive=True)
+            #print('Deleting files from ' + os.path.dirname(csv_files[5]))
+            for files in nested_files:
+                os.remove(files)
+        shutil.rmtree(os.path.dirname(folders))
+        print('all files in ' + str(file_location))
+    except FileNotFoundError:
+        print(file_location + 'not found')
 
 
-csv_folder_delete('/Volumes/TPC')
-folder_clean_up('/Volumes/TPC','xml')
-
+filetype_delete('/Volumes/SSD/TPC990/JSON Indexes_Amazon','csv')
+filetype_delete('/Volumes/SSD/TPC990/JSON Indexes_Amazon','json')
+#neste_file_folder_delete('/Volumes/SSD/TPC990/JSON Indexes_Amazon','csv')
 
 
 

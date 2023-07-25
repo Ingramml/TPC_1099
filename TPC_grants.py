@@ -7,8 +7,12 @@ import os
 
 #files = glob.glob('/Volumes/SSD/TPC990/TPC_xml/*.xml')
 #target_location = '/Volumes/SSD/production'
-def irs_grants(files,target_location):
+def irs_grants(file_location,target_location):
+    my_extension = "*.xml"
+    my_pattern = file_location + "/" + my_extension
+    files = glob.glob(my_pattern)
     for i in tqdm(files):
+        print(i)
         rows2 = []
         df2 = pd.DataFrame(rows2, columns=['EIN', 'Docnumber'])
         tree = ET.parse(i)
@@ -96,22 +100,25 @@ def irs_grants(files,target_location):
                     """
                     amount_element_check = recipient.find('./{http://www.irs.gov/efile}CashGrantAmt')
                     amount_element_check2 = recipient.find('./{http://www.irs.gov/efile}AmountOfCashGrant')
-                    amount_element = amount_element_check.text if ET.iselement(amount_element_check) == True else amount_element_check2.text if ET.iselement(amount_element_check2)==True else ''
+                    amount_element = amount_element_check.text if ET.iselement(amount_element_check) == True else \
+                        amount_element_check2.text if ET.iselement(amount_element_check2)==True else None
 
                     status_element_check = recipient.find('./{http://www.irs.gov/efile}IRCSectionDesc')
                     status_element_check2 = recipient.find('./{http://www.irs.gov/efile}IRCSection')
-                    status_element = status_element_check.text if ET.iselement(status_element_check) == True else status_element_check2.text if ET.iselement(status_element_check2)==True else ''
+                    status_element = status_element_check.text if ET.iselement(status_element_check) == True else \
+                        status_element_check2.text if ET.iselement(status_element_check2)==True else None
 
                     purpose_element_check = recipient.find('./{http://www.irs.gov/efile}PurposeOfGrantTxt')
                     purpose_element_check2 = recipient.find('./{http://www.irs.gov/efile}PurposeOfGrant')
-                    purpose_element = purpose_element_check.text if ET.iselement(purpose_element_check) == True else purpose_element_check2.text if ET.iselement(purpose_element_check2)==True else ''
+                    purpose_element = purpose_element_check.text if ET.iselement(purpose_element_check) == True else \
+                        purpose_element_check2.text if ET.iselement(purpose_element_check2)==True else None
 
                     #address = address_element_line1 + ' ' + address_element_line2 + ' ' + address_element_city + ' ' + address_element_state + ' ' + address_element_zip
 
                     rows.append([GrantorEIN, recipient_EIN, business_name, amount_element,
                                 purpose_element, year])
 
-                df = pd.DataFrame(rows, columns=["grantor_ein", "grantee_ein", "organization", "amount", "purpose", "year"], dtype="object")  # creates df of orgs donations
+                df = pd.DataFrame(rows, columns=["grantor_ein", "grantee_ein", "grantee_name", "amount", "purpose", "year"], dtype="object")  # creates df of orgs donations
                 df.to_csv(filecheck)
             elif ET.iselement(GrantOrContributionPdDurYrGrp_check):
                 grants_list = root[1].findall("./*/*/{http://www.irs.gov/efile}GrantOrContributionPdDurYrGrp")
@@ -128,13 +135,13 @@ def irs_grants(files,target_location):
                     business_name = business_name_check.text if ET.iselement(
                         business_name_check) else business_name_check3.text if ET.iselement(
                         business_name_check3) else business_name_check2.text if ET.iselement(
-                        business_name_check2) else ''
+                        business_name_check2) else None
                     #Org name ln2
                     business_name_check_ln2 = recipient.find('./*/{http://www.irs.gov/efile}BusinessNameLine2Txt')
                     business_name_check2_ln2 = recipient.find('./*/{http://www.irs.gov/efile}BusinessNameLine2')
                     business_name_ln2 = business_name_check_ln2.text if ET.iselement(
                         business_name_check_ln2) else business_name_check2_ln2.text\
-                        if ET.iselement(business_name_check2_ln2) else ''
+                        if ET.iselement(business_name_check2_ln2) else None
 
                     business_name = business_name.upper() + ' ' + business_name_ln2.upper()
 
@@ -165,14 +172,14 @@ def irs_grants(files,target_location):
                     amount_element_check = recipient.find('./{http://www.irs.gov/efile}Amt')
                     amount_element = amount_element_check.text if ET.iselement(amount_element_check) \
                         else recipient.find('./{http://www.irs.gov/efile}AmountOfCashGrant').text if \
-                        ET.iselement(recipient.find('./{http://www.irs.gov/efile}AmountOfCashGrant')) else ''
+                        ET.iselement(recipient.find('./{http://www.irs.gov/efile}AmountOfCashGrant')) else None
 
                     # Org Status
                     status_element_check = recipient.find('./{http://www.irs.gov/efile}Status')
-                    status_element = status_element_check.text if ET.iselement(status_element_check) else ''
+                    status_element = status_element_check.text if ET.iselement(status_element_check) else None
                     # Purpose
                     purpose_element_check = recipient.find('./{http://www.irs.gov/efile}GrantOrContributionPurposeTxt')
-                    purpose_element = purpose_element_check.text if ET.iselement(purpose_element_check) else ''
+                    purpose_element = purpose_element_check.text if ET.iselement(purpose_element_check) else None
                     # combines Element
                     #address = address_element_line1 + ' ' + address_element_line2 + ' ' + address_element_city + ' ' + address_element_state + ' ' + address_element_zip
 
@@ -182,3 +189,5 @@ def irs_grants(files,target_location):
                 df.to_csv(filecheck)
             else:
                 pass
+
+irs_grants('/Users/michaelingram/Documents/XML_downloade','/Users/michaelingram/Documents/XML_downloade')

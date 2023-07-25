@@ -16,7 +16,7 @@ def irs_boardmember(files,target_location):
         begindate_check = root[0].find('./{http://www.irs.gov/efile}TaxPeriodBeginDate')
         begindate_chcek2 = root[0].find('./{http://www.irs.gov/efile}TaxPeriodBeginDt')
         begindate = begindate_check.text if ET.iselement(
-            begindate_check) else begindate_chcek2.text if ET.iselement(begindate_chcek2) else ''
+            begindate_check) else begindate_chcek2.text if ET.iselement(begindate_chcek2) else None
         year = begindate[0:4]
         # Creates folder based on begining year of tax return(begindate)
         if ET.iselement(GrantorEIN_check):
@@ -34,7 +34,7 @@ def irs_boardmember(files,target_location):
         boardmemebrs = root[1].findall('.//{http://www.irs.gov/efile}Form990PartVIISectionA') if \
             ET.iselement(root[1].find('.//{http://www.irs.gov/efile}Form990PartVIISectionA')) \
             else root[1].findall('.//{http://www.irs.gov/efile}Form990PartVIISectionAGrp') if \
-            ET.iselement(root[1].find('.//{http://www.irs.gov/efile}Form990PartVIISectionAGrp')) else ''
+            ET.iselement(root[1].find('.//{http://www.irs.gov/efile}Form990PartVIISectionAGrp')) else None
 
         EIN = root[0].find('.//{http://www.irs.gov/efile}EIN').text
         rows = []
@@ -53,7 +53,7 @@ def irs_boardmember(files,target_location):
                 boardmemeber.find("{http://www.irs.gov/efile}NamePerson")) \
                 else boardmemeber.find("{http://www.irs.gov/efile}PersonNm").text if ET.iselement(
                 boardmemeber.find("{http://www.irs.gov/efile}PersonNm")) \
-                else ''
+                else None
             """
             finds board members title
             title_check = boardmemeber.find('{http://www.irs.gov/efile}Title')
@@ -65,13 +65,13 @@ def irs_boardmember(files,target_location):
                 boardmemeber.find('{http://www.irs.gov/efile}Title')) \
                 else boardmemeber.find('{http://www.irs.gov/efile}TitleTxt').text if ET.iselement(
                 boardmemeber.find('{http://www.irs.gov/efile}TitleTxt')) \
-                else ''
+                else None
 
             Averagehoursworked = boardmemeber.find('{http://www.irs.gov/efile}AverageHoursPerWeek').text if \
                 ET.iselement(boardmemeber.find('{http://www.irs.gov/efile}AverageHoursPerWeek')) \
                 else boardmemeber.find('{http://www.irs.gov/efile}AverageHoursPerWeekRt').text if \
                 ET.iselement(
-                    boardmemeber.find('{http://www.irs.gov/efile}AverageHoursPerWeekRt')) else ''  # boardmember[2].text
+                    boardmemeber.find('{http://www.irs.gov/efile}AverageHoursPerWeekRt')) else None  # boardmember[2].text
 
             Individualtrusteeordirector = boardmemeber.find('{http://www.irs.gov/efile}IndividualTrusteeOrDirector').text \
                 if ET.iselement(boardmemeber.find('{http://www.irs.gov/efile}IndividualTrusteeOrDirector')) else ''
@@ -79,17 +79,17 @@ def irs_boardmember(files,target_location):
             compensation_from_org = boardmemeber.find('{http://www.irs.gov/efile}ReportableCompFromOrganization').text if \
                 ET.iselement(boardmemeber.find('{http://www.irs.gov/efile}ReportableCompFromOrganization')) else \
                 boardmemeber.find('{http://www.irs.gov/efile}ReportableCompFromOrgAmt').text if \
-                ET.iselement(boardmemeber.find('{http://www.irs.gov/efile}ReportableCompFromOrgAmt')) else ''
+                ET.iselement(boardmemeber.find('{http://www.irs.gov/efile}ReportableCompFromOrgAmt')) else None
 
             compensation_from_related_org = boardmemeber.find('{http://www.irs.gov/efile}ReportableCompFromRelatedOrgs').text \
                 if ET.iselement(boardmemeber.find('{http://www.irs.gov/efile}ReportableCompFromRelatedOrgs')) \
                 else boardmemeber.find('{http://www.irs.gov/efile}ReportableCompFromRltdOrgAmt').text if \
-                ET.iselement(boardmemeber.find('{http://www.irs.gov/efile}ReportableCompFromRltdOrgAmt')) else ''
+                ET.iselement(boardmemeber.find('{http://www.irs.gov/efile}ReportableCompFromRltdOrgAmt')) else None
 
             other_compensation = boardmemeber.find('{http://www.irs.gov/efile}OtherCompensation').text if \
                 ET.iselement(boardmemeber.find('{http://www.irs.gov/efile}OtherCompensation')) else \
                 boardmemeber.find('{http://www.irs.gov/efile}OtherCompensationAmt').text if \
-                ET.iselement(boardmemeber.find('{http://www.irs.gov/efile}OtherCompensationAmt')) else ''
+                ET.iselement(boardmemeber.find('{http://www.irs.gov/efile}OtherCompensationAmt')) else None
 
             rows.append([EIN, Name, Title, Averagehoursworked, Individualtrusteeordirector, compensation_from_org,
                          compensation_from_related_org, other_compensation, year[0:4]])

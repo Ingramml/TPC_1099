@@ -7,16 +7,24 @@ from selenium.webdriver.support.wait import WebDriverWait
 import urllib.request
 import shutil
 import os
-import pandas as pd
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+
 #Searches for non-profits with name from search ter
+
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
 #df=pd.read_csv("/Volumes/SSD/TPC990/WOMAN'S MEDICAL_combined.csv")
 """
 eins = ['ein']
 for ein in eins:
 """
-ein = '721068329'
-target_location='/Users/michaelingram/Documents/xmltesting'
+#def xmldownload(ein, target_location)
+
+
+ein = '590830840'
+
+target_location='/Users/michaelingram/Documents/XML_downloade'
+os.makedirs(target_location,exist_ok=True)
 
 html_doc=driver.get("https://projects.propublica.org/nonprofits/organizations/"+ein)
 
