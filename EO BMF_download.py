@@ -7,6 +7,7 @@ import urllib.request
 import shutil
 import os
 #run monthly
+#downloads Masterfile from IRS
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
 html_doc=driver.get("https://www.irs.gov/charities-non-profits/exempt-organizations-business-master-file-extract-eo-bmf")

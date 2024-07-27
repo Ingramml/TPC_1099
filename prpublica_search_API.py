@@ -5,8 +5,8 @@ import pandas as pd
 import os
 
 #Searches for non-profits with name from search term and exports file
-searchterm = "center"
-target_location='/Volumes/SSD/TPC990/'
+searchterm = "Police"
+target_location='/Users/michaelingram/Downloads'
 
 response = requests.get('https://projects.propublica.org/nonprofits/api/v2/search.json?q='+searchterm)
 
