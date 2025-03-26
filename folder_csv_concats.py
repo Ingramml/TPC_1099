@@ -1,3 +1,4 @@
+#Concats all the files from folders for uploading
 import glob
 import pandas as pd
 import os
