@@ -1,0 +1,24 @@
+import math
+import pandas as pd
+import numpy as np
+import os
+
+
+def csv_split(file_to_split, desired_length):
+
+    df = pd.read_csv(file_to_split)
+    filename = os.path.basename(file_to_split)
+    dirname = os.path.dirname(file_to_split)
+    # TO DO calulcation based on size for y
+    y = math.ceil(len(df) / desired_length)
+    x = 1
+    array = []
+    data_frames = np.array_split(df, y)
+    for i in data_frames:
+        i.to_csv(os.path.join(dirname, filename[:-4] + '_split-' + str(x) + '.csv'), index=False)
+        print(len(i))
+        array.append(i)
+        x = x + 1
+    print(str(x) + ' files  created ' + str(y) + ' rows long.')
+    print(array)
+    return array

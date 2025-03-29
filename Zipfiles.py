@@ -1,3 +1,4 @@
+#unzip all the fiels donloaded from IRS website
 import zipfile
 import glob
 import os
@@ -31,7 +32,6 @@ for i in files:
     # Sets up Dictionar fiile
     rows2 = []
     df2 = pd.DataFrame(rows2, columns=['EIN', 'Docnumber'])
-
 
 
     for x in tqdm(allxml):
